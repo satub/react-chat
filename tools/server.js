@@ -33,17 +33,17 @@ app.get('*', function(req, res) {
 io.on('connection', function(socket) {
   console.log('a user connected');
   socket.on('subscribe', (data) => {
-    room = data.room
+    room = data.room;
     socket.join(room);
     console.log('joined room', room);
    }
-  )
-  socket.on('unsubscribe', () => { socket.leave(room)
+ );
+  socket.on('unsubscribe', () => { socket.leave(room);
     console.log('leaving room', room);
-  })
+  });
   socket.on('disconnect', () => {
     console.log('a user disconnected');
-  })
+  });
 
   // io.sockets.on('connect', (socket) => {
   //   socket.on('subscribe', (data) => {
@@ -55,7 +55,7 @@ io.on('connection', function(socket) {
     console.log('sending message to', room);
     console.log('this message', msg);
     io.to(room).emit('chat message', JSON.stringify(msg));
-  })
+  });
 
   socket.on('file_upload', (name, buffer) => {
     const fileName = __dirname + '/tmp/uploads/' + name;
@@ -65,10 +65,10 @@ io.on('connection', function(socket) {
 
       fs.write(fd, buffer, null, 'Binary', (err, written, buff) => {
         fs.close(fd, () => {
-          console.log('file saved successfully!')
+          console.log('file saved successfully!');
         });
-      })
-    })
+      });
+    });
     console.log('reached room, sending to', room);
     socket.to(room).emit('file_upload_success', buffer);
   });

@@ -30,8 +30,10 @@ class ChatContainer extends Component {
   componentWillMount() {
       if(!(this.state.connected)){
         socket.emit('subscribe', {room: this.props.room.title});
-        this.setState({connected: true});
-     }
+        this.setState(
+          {connected: true
+        });
+      }
     socket.on('file_upload_success', (fileName) => {
       console.log('file upload action was emitted', fileName);
       this.setState({ imageUrl: fileName });
@@ -40,6 +42,10 @@ class ChatContainer extends Component {
     console.log('will mount initated');
    }
 
+   componentDidUpdate(){
+    //  debugger;
+     socket.emit('subscribe', {room: this.props.room.title});
+   }
   componentDidMount(){
     // debugger;
     console.log('did mount');
@@ -52,7 +58,7 @@ class ChatContainer extends Component {
   }
 
   _handleMessageEvent(){
-    debugger;
+    // debugger;
      socket.on('chat message', (inboundMessage) => {
        this.props.newMessage({room: this.props.room, newMessage: {user: 'antoin', message: inboundMessage}});
        console.log('received message', inboundMessage);
