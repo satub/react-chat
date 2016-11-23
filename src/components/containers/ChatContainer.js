@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import * as messageActions from '../../actions/messagesActions'
-import * as roomActions from '../../actions/roomActions'
-import { bindActionCreators } from 'redux'
-import ChatLog from '../chatLog'
-import FileUploader from '../fileUpload'
-import { Image, Glyphicon, InputGroup, PageHeader, Col, Button, FormGroup, FormControl } from 'react-bootstrap'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as messageActions from '../../actions/messagesActions';
+import * as roomActions from '../../actions/roomActions';
+import { bindActionCreators } from 'redux';
+import ChatLog from '../chatLog';
+import FileUploader from '../fileUpload';
+import { Image, Glyphicon, InputGroup, PageHeader, Col, Button, FormGroup, FormControl } from 'react-bootstrap';
 
 const io = require('socket.io-client')
 const socket = io();
 
-class ChatContainer extends Component { 
+class ChatContainer extends Component {
   constructor(props) {
-    super(props)
-     this.state = { 
+    super(props);
+     this.state = {
        input : '',
        file: '',
        imagePreviewUrl: '',
@@ -21,32 +21,32 @@ class ChatContainer extends Component {
        connected: false
      }
 
-     this.handleOnChange = this.handleOnChange.bind(this)
-     this.handleOnSubmit = this.handleOnSubmit.bind(this)
-     this._handleMessageEvent = this._handleMessageEvent.bind(this)
-    }  
+     this.handleOnChange = this.handleOnChange.bind(this);
+     this.handleOnSubmit = this.handleOnSubmit.bind(this);
+     this._handleMessageEvent = this._handleMessageEvent.bind(this);
+    }
 
 
   componentWillMount() {
-      if(!(this.state.connected)){ 
-        socket.emit('subscribe', {room: this.props.room.title})
-        this.setState({connected: true})
+      if(!(this.state.connected)){
+        socket.emit('subscribe', {room: this.props.room.title});
+        this.setState({connected: true});
      }
     socket.on('file_upload_success', (fileName) => {
-      console.log('file upload action was emitted', fileName)
-      this.setState({ imageUrl: fileName })
-    })
+      console.log('file upload action was emitted', fileName);
+      this.setState({ imageUrl: fileName });
+    });
     // this._handleMessageEvent()
-    console.log('will mount initated')
+    console.log('will mount initated');
    }
 
   componentDidMount(){
-    debugger
-    console.log('did mount')
-    this._handleMessageEvent()
+    // debugger;
+    console.log('did mount');
+    this._handleMessageEvent();
      // socket.on('chat message', (inboundMessage) => {
 
-     //   this.props.newMessage({room: this.props.room, newMessage: {user: 'antoin', message: inboundMessage}}) 
+     //   this.props.newMessage({room: this.props.room, newMessage: {user: 'antoin', message: inboundMessage}})
      //   console.log('received message', inboundMessage)
      // })
   }
@@ -54,41 +54,41 @@ class ChatContainer extends Component {
   _handleMessageEvent(){
     debugger;
      socket.on('chat message', (inboundMessage) => {
-       this.props.newMessage({room: this.props.room, newMessage: {user: 'antoin', message: inboundMessage}}) 
-       console.log('received message', inboundMessage)
+       this.props.newMessage({room: this.props.room, newMessage: {user: 'antoin', message: inboundMessage}});
+       console.log('received message', inboundMessage);
      })
   }
 
   handleOnChange(ev) {
-   this.setState({ input: ev.target.value}) 
-  } 
+   this.setState({ input: ev.target.value});
+  }
 
-  
+
   handleOnSubmit(ev) {
-    ev.preventDefault()
-    socket.emit('chat message', {message: this.state.input, room: this.props.room.title})
+    ev.preventDefault();
+    socket.emit('chat message', {message: this.state.input, room: this.props.room.title});
     // this.props.newMessage({room: this.props.room, newMessage: {user: 'antoin', message: this.state.input}})
-    this.setState({ input: '' })
+    this.setState({ input: '' });
   }
 
   handleOnUpload(imageUrl) {
      this.setState({
       imagePreviewUrl: imageUrl
-    })
+    });
   }
 
   render() {
     let imageView;
     if(this.state.imageUrl) {
       imageView = (
-        <div> 
-          <Col xs={6} md={4}> 
+        <div>
+          <Col xs={6} md={4}>
             <image className="image-preview" src={this.state.imageUrl}  />
           </Col>
         </div>
-      )
+      );
     }
-          
+
     return (
       <div>
         <PageHeader> Welcome to React Chat </PageHeader>
@@ -97,22 +97,22 @@ class ChatContainer extends Component {
           <FormGroup>
             <InputGroup>
             <FormControl onChange={this.handleOnChange} value={this.state.input}/>
-            <InputGroup.Addon > 
+            <InputGroup.Addon >
               <Glyphicon glyph="music" />
               </InputGroup.Addon>
-            <InputGroup.Button> 
+            <InputGroup.Button>
               <Button bsStyle="primary" type="submit" onClick={this.handleOnSubmit}> Send </Button>
             </InputGroup.Button>
           </InputGroup>
         </FormGroup>
         </form>
-        <FileUploader /> 
-      
-      <h1> 
-       
+        <FileUploader />
+
+      <h1>
+
      </h1>
    </div>
-    )
+    );
   }
 }
 
@@ -124,4 +124,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ newMessage: messageActions.newMessage }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ChatContainer);
