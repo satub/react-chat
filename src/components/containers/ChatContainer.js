@@ -7,7 +7,7 @@ import ChatLog from '../chatLog';
 import FileUploader from '../fileUpload';
 import { Image, Glyphicon, InputGroup, PageHeader, Col, Button, FormGroup, FormControl } from 'react-bootstrap';
 
-const io = require('socket.io-client')
+const io = require('socket.io-client');
 const socket = io();
 
 class ChatContainer extends Component {
@@ -19,7 +19,7 @@ class ChatContainer extends Component {
        imagePreviewUrl: '',
        messages: props.messages,
        connected: false
-     }
+     };
 
      this.handleOnChange = this.handleOnChange.bind(this);
      this.handleOnSubmit = this.handleOnSubmit.bind(this);
@@ -56,7 +56,7 @@ class ChatContainer extends Component {
      socket.on('chat message', (inboundMessage) => {
        this.props.newMessage({room: this.props.room, newMessage: {user: 'antoin', message: inboundMessage}});
        console.log('received message', inboundMessage);
-     })
+     });
   }
 
   handleOnChange(ev) {
@@ -117,11 +117,11 @@ class ChatContainer extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  return { messages: state.activeRoom.messages, room: state.activeRoom }
+  return { messages: state.activeRoom.messages, room: state.activeRoom };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ newMessage: messageActions.newMessage }, dispatch)
+  return bindActionCreators({ newMessage: messageActions.newMessage }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatContainer);
